@@ -24,7 +24,8 @@
 # Setup project
 * Install docker: https://docs.docker.com/get-docker/
 * Install docker compose: https://docs.docker.com/compose/install/
-* Rename `.env.sample` to `.env`
+* Rename `.env.sample` to `.env`, `.env.test.sample` to `.env.test`
+* Start MySQL: `docker-compose up -d mysql`, create `analytics` and `analytics_test` database using `src/db/schema.sql`
 
 # Run the project
 * Start: `docker-compose up -d`

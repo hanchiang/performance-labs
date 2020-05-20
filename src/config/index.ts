@@ -1,10 +1,9 @@
 import fs from 'fs';
 
-if (fs.existsSync('.env')) {
-  require('dotenv').config({ path: '.env' });
-}
 if (process.env.NODE_ENV === 'test' && fs.existsSync('.env.test')) {
   require('dotenv').config({ path: '.env.test' });
+} else if (fs.existsSync('.env')) {
+  require('dotenv').config({ path: '.env' });
 }
 
 const config = {

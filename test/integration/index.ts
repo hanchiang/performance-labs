@@ -20,10 +20,13 @@ describe('Integration test', () => {
     });
   });
 
-  it('should pass', async () => {
-    const res = await request(server).get('/').expect(200);
-    expect(res.body.payload.includes('Service is up and running')).to.equal(
-      true
-    );
-  });
+  // Case 1: chart value cannot be lower than 0
+
+  // Case 2: chart value cannot be more than 100
+
+  // Case 3: chart value keeps going up, with log values 0
+
+  // Case 4: chart value drops with positive log values
+
+  // Log utc offset must match user utc offset
 });

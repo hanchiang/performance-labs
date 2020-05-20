@@ -28,7 +28,7 @@ const logSchema = {
       key: 'id',
     },
   },
-  dateTime: {
+  datetime: {
     type: DataTypes.DATE,
     allowNull: false,
   },
