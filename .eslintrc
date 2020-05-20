@@ -17,6 +17,7 @@
     "prettier/prettier": "error",
     "semi": ["error", "always"],
     "prefer-rest-params": 0,
+    "@typescript-eslint/no-empty-function": 1,
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": 1,
     "@typescript-eslint/no-inferrable-types": [

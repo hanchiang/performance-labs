@@ -1,33 +1,16 @@
-import { v4 as uidv4 } from 'uuid';
 import fs from 'fs';
+import { promisify } from 'util';
 
 import { User } from '../db';
-
-const utcOffsets: number[] = [-360, 120, 480, 60];
 const USERS_FILE = 'seed.json';
+
+const readFileAsync = promisify(fs.readFile).bind(fs);
 
 // to run: npm run build && node dist/seed/seed.js
 
-const generateUsers = async () => {
-  const users: any[] = [];
-
-  for (let i = 0; i < utcOffsets.length; i++) {
-    users.push({
-      id: uidv4(),
-      utcOffset: utcOffsets[i],
-    });
-  }
-
-  await User.bulkCreate(users);
-
-  return new Promise((resolve, reject) => {
-    fs.writeFile(USERS_FILE, JSON.stringify(users, undefined, 2), (err) => {
-      if (err) {
-        reject(err);
-      }
-      resolve();
-    });
-  });
+const createUsers = async () => {
+  const users = await readFileAsync(USERS_FILE, { encoding: 'utf-8' });
+  await User.bulkCreate(JSON.parse(users));
 };
 
-generateUsers();
+createUsers();
