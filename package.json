@@ -27,7 +27,7 @@
     "start": "npm run serve",
     "build": "npm run build-ts && npm run lint && npm run format",
     "serve": "node dist/bin/www.js",
-    "watch-node": "nodemon dist/bin/www.js",
+    "watch-node": "nodemon dist/server.js",
     "test": "npm run test-unit && npm run test-integration",
     "test-integration": "nyc mocha -r ts-node/register test/integration/index.ts",
     "test-unit": "nyc mocha -r ts-node/register test/unit/index.ts",
@@ -38,7 +38,7 @@
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
     "copy-static-assets": "ts-node copyStaticAssets.ts",
     "debug": "npm run build && npm run watch-debug",
-    "serve-debug": "nodemon --inspect dist/bin/www.js",
+    "serve-debug": "nodemon --inspect dist/server.js",
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
   },
   "dependencies": {

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import lusca from 'lusca';
 
 import routes from './routes';
-import * as middlewares from './middlewares';
+import * as middlewares from './middleware';
 
 // Create Express server
 const app = express();

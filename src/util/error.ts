@@ -1,4 +1,4 @@
-import { ThrowError } from '../types/error';
+import { ThrowError } from '../type/error';
 
 export const throwError = (errObj: ThrowError) => {
   const error: any = new Error(errObj.message);

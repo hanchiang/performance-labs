@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import * as middlewares from '../middlewares';
+import * as middlewares from '../middleware';
 const router = express.Router();
 
 router.get(
