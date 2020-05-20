@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  analytics-service:
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+
+  mysql:
+    environment:
+      - MYSQL_DATABASE=analytics
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=admin
