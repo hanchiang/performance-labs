@@ -5,6 +5,7 @@ services:
     environment:
       - NODE_ENV=development
       - MYSQL_DATABASE=analytics
+      - MYSQL_HOST=mysql
       - MYSQL_USER=user
       - MYSQL_PASSWORD=admin
     ports:
