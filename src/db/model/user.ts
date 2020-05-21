@@ -1,10 +1,10 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 
 export class User extends Model {
-  private id!: string;
-  private utcOffset!: number;
-  private createdAt!: Date;
-  private updatedAt!: Date;
+  public readonly id!: string;
+  public readonly utcOffset!: number;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 
   toJSON() {
     return this.get({ plain: true });

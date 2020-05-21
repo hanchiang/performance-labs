@@ -1,12 +1,12 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 
 export class Log extends Model {
-  private id!: number;
-  private userId!: string;
-  private dateTime: Date;
-  private value!: number;
-  private createdAt!: Date;
-  private updatedAt!: Date;
+  public readonly id!: number;
+  public readonly userId!: string;
+  public readonly dateTime: Date;
+  public readonly value!: number;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 
   toJSON() {
     return this.get({ plain: true });

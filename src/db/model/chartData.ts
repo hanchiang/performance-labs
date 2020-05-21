@@ -1,11 +1,11 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export class ChartData extends Model {
-  private id!: number;
-  private logId!: number;
-  private value!: number;
-  private createdAt!: Date;
-  private updatedAt!: Date;
+  public readonly id!: number;
+  public readonly logId!: number;
+  public readonly value!: number;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 
   toJSON() {
     return this.get({ plain: true });
@@ -36,7 +36,7 @@ const chartDataSchema = {
 export const initChartData = (sequelize: Sequelize) => {
   ChartData.init(chartDataSchema, {
     sequelize,
-    tableName: 'log',
+    tableName: 'chart_data',
     underscored: true,
   });
 };
