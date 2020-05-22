@@ -5,8 +5,10 @@
 * Chart value increases by 10 every hour, starting at 0 for each new day
 
 # Assumptions
-* Log value should be positive
-* Log date is in the format "YYYY-MM-DD hh:mm:ss Z"
+* Logs will always arrive in chronological order, i.e. log date is strictly in ascending order
+* Log date is in the format "YYYY-MM-DD HH:mm:ss Z"
+* For each user per day, log `datetime` is unique 
+* Utc offset in log date must be the same as user utc offset
 
 # Project structure
 * `seed.json`: Contains user data that are seeded into the database
@@ -25,7 +27,7 @@
 * Install docker: https://docs.docker.com/get-docker/
 * Install docker compose: https://docs.docker.com/compose/install/
 * Rename `.env.sample` to `.env`, `.env.test.sample` to `.env.test`
-* Start MySQL: `docker-compose up -d mysql`, create `analytics` and `analytics_test` database using `src/db/schema.sql`
+* Start MySQL: `docker-compose up -d mysql`, create `analytics` and `analytics_test` database, and create the tables using `src/db/schema.sql`
 
 # Run the project
 * Start: `docker-compose up -d`
