@@ -18,13 +18,13 @@ export const formatResponse = (
   const oldJson = res.json;
 
   res.json = function (data) {
-    const retVal: any = {};
     if (res.statusCode >= 400) {
-      retVal.error = data;
+      return oldJson.call(res, {
+        error: data,
+      });
     } else {
-      retVal.payload = data;
+      return oldJson.call(res, data);
     }
-    return oldJson.call(res, retVal);
   };
   next();
 };
