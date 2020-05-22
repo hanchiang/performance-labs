@@ -31,6 +31,7 @@
 # Setup project
 * Install docker: https://docs.docker.com/get-docker/
 * Install docker compose: https://docs.docker.com/compose/install/
+* Clone project: `git clone https://github.com/hanchiang/performance-labs.git`
 * Rename `.env.sample` to `.env`, `.env.test.sample` to `.env.test`
 * Start MySQL: `docker-compose up -d mysql`, create `analytics` and `analytics_test` database, and create the tables using `src/db/schema.sql`
 
@@ -38,3 +39,8 @@
 * Start: `docker-compose up -d`
 * Generate users: `npm run build && node dist/seed/seed.js`
 * Stop: `docker-compose down`
+
+# Run tests
+* Unit tests: `npm run test-unit`
+* Integration tests: `npm run test-integration`
+* All tests: `npm run test`

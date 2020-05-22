@@ -315,7 +315,7 @@ describe('Integration test', () => {
     });
   });
 
-  describe.only('Get user logs', () => {
+  describe('Get user logs', () => {
     describe('Route logics', () => {
       beforeEach(async () => {
         await User.bulkCreate(seed);

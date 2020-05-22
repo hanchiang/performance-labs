@@ -36,13 +36,11 @@ describe('Unit test', () => {
       await User.create(user);
       await Log.create(log);
 
-      const logFromDb: any = (
-        await Log.findOne({
-          where: {
-            id: log.id,
-          },
-        })
-      ).toJson();
+      const logFromDb: any = await Log.findOne({
+        where: {
+          id: log.id,
+        },
+      });
 
       // MySQL stores date time in UTC
       expect(logFromDb.datetime).to.eql(
