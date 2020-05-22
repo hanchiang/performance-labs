@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import config from '../config';
 import { throwError } from '../util/error';
 import { CustomError } from '../type/error';
+import logger from '../util/logger';
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   throwError({
@@ -19,6 +20,7 @@ export const formatResponse = (
 
   res.json = function (data) {
     if (res.statusCode >= 400) {
+      logger.error(data);
       return oldJson.call(res, {
         error: data,
       });

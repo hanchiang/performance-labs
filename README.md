@@ -7,18 +7,23 @@
 # Assumptions
 * Logs will always arrive in chronological order, i.e. log date is strictly in ascending order
 * Log date is in the format "YYYY-MM-DD HH:mm:ss Z"
-* For each user per day, log `datetime` is unique 
+* For each user per day, log `datetime` is unique
 * Utc offset in log date must be the same as user utc offset
+* Chart value interval in 1 hour, i.e. chart value only increase on the hour, not part thereof
 
 # Project structure
 * `seed.json`: Contains user data that are seeded into the database
-* `bin/www`: Server entry point in production
+* `src/bin/www`: Server entry point in production
 * `src/config`: Contain environment variables and other configuration
+* `src/controller`: Logic for handling API requests
 * `src/db/`: MySQL sequelize setup
 * `src/middleware`: Express middlewares
+* `src/routes`: API routes
 * `src/seed/`: Seed users into database
+* `src/service`: Handles the main business logic
 * `src/type`: Type definitions
 * `src/util`: Utilities
+* `src/validator`: Validator API request parameters
 * `test/`: Contains unit tests and integration tests
 * `app.ts`: Express server configuration
 * `server.ts`: Server entry point in development
