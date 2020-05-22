@@ -27,7 +27,7 @@ const chartDataSchema = {
     },
   },
   value: {
-    type: DataTypes.SMALLINT,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
 };

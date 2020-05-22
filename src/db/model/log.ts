@@ -32,7 +32,7 @@ const logSchema = {
     allowNull: false,
   },
   value: {
-    type: DataTypes.SMALLINT,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
 };
