@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { Op } from 'sequelize';
 
 import { Chart, Log, sequelize } from '../db';
@@ -39,19 +40,17 @@ export const addLog = async (requestObj: AddLog) => {
     limit: 1,
   });
 
+  let currentChartValue: number;
+
   if (logChart) {
     logChart = logChart.toJSON();
-  }
-
-  let currentChartValue: number =
-    datetimeMoment.diff(startDatetime, 'hour') * config.chartIncrementPerHour;
-  if (logChart != null) {
+    currentChartValue =
+      datetimeMoment.diff(moment(logChart.datetime), 'hour') *
+      config.chartIncrementPerHour;
     currentChartValue += logChart.Chart.value;
+  } else {
+    currentChartValue = datetimeMoment.hour() * config.chartIncrementPerHour;
   }
-
-  logger.info(
-    `startDatetime: ${startDatetime}, currentChartvalue: ${currentChartValue}`
-  );
 
   const result = await sequelize.transaction(async () => {
     const log = await Log.create(requestObj);
