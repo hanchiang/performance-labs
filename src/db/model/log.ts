@@ -25,7 +25,6 @@ const logSchema = {
     allowNull: false,
     references: {
       model: 'User',
-      key: 'id',
     },
   },
   datetime: {

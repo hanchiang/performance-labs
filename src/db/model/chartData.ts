@@ -1,13 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export class ChartData extends Model {
+export class Chart extends Model {
   public readonly id!: number;
   public readonly logId!: number;
   public readonly value!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  toJSON() {
+  public toJSON() {
     return this.get({ plain: true });
   }
 }
@@ -24,7 +24,6 @@ const chartDataSchema = {
     allowNull: false,
     references: {
       model: 'Log',
-      key: 'id',
     },
   },
   value: {
@@ -34,7 +33,7 @@ const chartDataSchema = {
 };
 
 export const initChartData = (sequelize: Sequelize) => {
-  ChartData.init(chartDataSchema, {
+  Chart.init(chartDataSchema, {
     sequelize,
     tableName: 'chart_data',
     underscored: true,
