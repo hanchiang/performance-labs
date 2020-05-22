@@ -6,7 +6,7 @@ import request from 'supertest';
 import app from '../../src/app';
 import configTest from '../config';
 import config from '../../src/config';
-import { User, sequelize, Chart } from '../../src/db';
+import { User, sequelize, Chart, Log } from '../../src/db';
 
 const seed = require('../../seed.json');
 
@@ -34,7 +34,7 @@ describe('Integration test', () => {
       value: 10,
     };
 
-    describe('Request validations', () => {
+    describe('Validation error', () => {
       it('invalid userId', async () => {
         // userId is missing
         let res = await request(server).post('/logs').send({
@@ -182,7 +182,7 @@ describe('Integration test', () => {
       });
     });
 
-    describe('Route controller logics', () => {
+    describe('Route logic', () => {
       beforeEach(async () => {
         await User.bulkCreate(seed);
       });
@@ -193,7 +193,7 @@ describe('Integration test', () => {
         });
       });
 
-      describe('Failed requests', () => {
+      describe('Add log: run time error', () => {
         it('user id is not found in database', async () => {
           const res = await request(server).post('/logs').send({
             userId: '1',
@@ -236,9 +236,9 @@ describe('Integration test', () => {
         });
       });
 
-      describe('Successful requests', () => {
+      describe('Add log: Successful requests', () => {
         const user = seed[0];
-        it('should add log and chart, with log values 0 on the same day', async () => {
+        it('should add log and chart, and get the expected chart value from database', async () => {
           // day -1, hour 0, log value 10, expect chart value 0
           let datetime = moment()
             .subtract(1, 'day')
@@ -315,16 +315,88 @@ describe('Integration test', () => {
     });
   });
 
-  // user id must exist in database
-  // Log utc offset must match user utc offset
+  describe.only('Get user logs', () => {
+    describe('Route logics', () => {
+      beforeEach(async () => {
+        await User.bulkCreate(seed);
+      });
 
-  // Case 1: chart value cannot be lower than 0
+      afterEach(async () => {
+        await User.destroy({
+          where: {},
+        });
+      });
 
-  // Case 2: chart value cannot be more than 100
+      describe('Run time error', () => {
+        it('user id is not found in database', async () => {
+          const res = await request(server).post('/logs').send({
+            userId: '1',
+            datetime: '2020-01-01 01:00:00 +0700',
+            value: 10,
+          });
+          expect(res.status).to.equal(400);
+          expect(res.body.error.message.toLowerCase()).to.equal(
+            `user 1 is not found`
+          );
+        });
 
-  // Case 3: chart value keeps going up, with log values 0
+        it('should get the logs for user', async () => {
+          // add logs for user 1
+          const logsUser1 = [
+            {
+              userId: seed[0].id,
+              datetime: '2020-01-01 01:00:00 -0600',
+              value: 10,
+            },
+            {
+              userId: seed[0].id,
+              datetime: '2020-01-01 05:00:00 -0600',
+              value: 20,
+            },
+          ];
+          await request(server).post('/logs').send(logsUser1[0]);
+          await request(server).post('/logs').send(logsUser1[1]);
 
-  // Case 4: chart value drops with positive log values
+          // add logs for user 2
+          const logsUser2 = [
+            {
+              userId: seed[1].id,
+              datetime: '2020-01-01 07:30:00 +0200',
+              value: 30,
+            },
+          ];
+          await request(server).post('/logs').send(logsUser2[0]);
 
-  // Chart value calculation should only use values from the start of the day onwards
+          // should get user 1 logs
+          const expectedChartValues = [5, 35];
+          const resultUser1 = await request(server).get(
+            `/logs/${logsUser1[0].userId}`
+          );
+          expect(resultUser1.status).to.equal(200);
+          expect(resultUser1.body.length).to.equal(logsUser1.length);
+          for (let i = 0; i < resultUser1.body.length; i++) {
+            const logChart = resultUser1.body[i];
+            expect(logChart.userId).to.equal(logsUser1[i].userId);
+            expect(logChart.datetime).to.equal(logsUser1[i].datetime);
+            expect(logChart.value).to.equal(logsUser1[i].value);
+            expect(logChart.Chart.logId).to.equal(logChart.id);
+            expect(logChart.Chart.value).to.equal(expectedChartValues[i]);
+          }
+
+          // should get user 2 logs
+          const resultUser2 = await request(server).get(
+            `/logs/${logsUser2[0].userId}`
+          );
+          expect(resultUser2.status).to.equal(200);
+          expect(resultUser2.body.length).to.equal(logsUser2.length);
+          const logChart = resultUser2.body[0];
+          expect(logChart.userId).to.equal(logsUser2[0].userId);
+          expect(logChart.datetime).to.equal(logsUser2[0].datetime);
+          expect(logChart.value).to.equal(logsUser2[0].value);
+          expect(logChart.Chart.logId).to.equal(logChart.id);
+          expect(logChart.Chart.value).to.equal(55);
+        });
+      });
+    });
+  });
 });

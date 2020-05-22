@@ -6,7 +6,7 @@ export class User extends Model {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  toJSON() {
+  toJson() {
     return this.get({ plain: true });
   }
 }

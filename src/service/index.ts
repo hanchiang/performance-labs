@@ -43,7 +43,7 @@ export const addLog = async (requestObj: AddLog) => {
   let currentChartValue: number;
 
   if (logChart) {
-    logChart = logChart.toJSON();
+    logChart = logChart.toJson();
     currentChartValue =
       datetimeMoment.diff(moment(logChart.datetime), 'hour') *
       config.chartIncrementPerHour;
@@ -84,4 +84,18 @@ export const addChartValue = async (requestObj: AddChartValue) => {
     logId,
     value: chartValue,
   });
+};
+
+export const getLogChart = async (userId: string, utcOffset: number) => {
+  const logCharts: any = await Log.findAll({
+    where: {
+      userId,
+    },
+    include: [{ model: Chart }],
+  });
+  if (logCharts == null) {
+    logger.info(`No logs found for user ${userId}`);
+    return [];
+  }
+  return logCharts.map((logChart: any) => logChart.toJson({ utcOffset }));
 };

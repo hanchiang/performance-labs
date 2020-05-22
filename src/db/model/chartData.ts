@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
+const FIELDS_TO_REMOVE = ['createdAt', 'updatedAt'];
 export class Chart extends Model {
   public readonly id!: number;
   public readonly logId!: number;
@@ -7,8 +8,12 @@ export class Chart extends Model {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public toJSON() {
-    return this.get({ plain: true });
+  public toJson(fieldsToRemove = FIELDS_TO_REMOVE) {
+    const chart: any = this.get({ plain: true });
+    fieldsToRemove.forEach((field: string) => {
+      delete chart[field];
+    });
+    return chart;
   }
 }
 

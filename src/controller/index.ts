@@ -1,11 +1,12 @@
 import moment from 'moment-timezone';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { User } from '../db';
 
 import { throwError, ErrorCode } from '../util/error';
 import { AddLogRequest } from '../type/request';
 import * as services from '../service';
 import * as dates from '../util/date';
+import logger from '../util/logger';
 
 export const addLog = async (req: Request, res: Response) => {
   const { userId, datetime, value }: AddLogRequest = req.body;
@@ -50,4 +51,23 @@ export const addLog = async (req: Request, res: Response) => {
     log: log.id,
     chart: chart.id,
   });
+};
+
+export const getLogsForUser = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const user = await User.findOne({
+    where: {
+      id: userId,
+    },
+  });
+  if (!user) {
+    logger.error(`User ${userId} is not found`);
+    throwError({
+      status: ErrorCode.BAD_REQUEST,
+      message: 'user is not found',
+    });
+  }
+
+  const result = await services.getLogChart(userId, user.utcOffset);
+  res.json(result);
 };

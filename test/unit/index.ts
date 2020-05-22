@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { expect } from 'chai';
 import moment from 'moment-timezone';
 
@@ -41,7 +42,7 @@ describe('Unit test', () => {
             id: log.id,
           },
         })
-      ).toJSON();
+      ).toJson();
 
       // MySQL stores date time in UTC
       expect(logFromDb.datetime).to.eql(
@@ -89,9 +90,9 @@ describe('Unit test', () => {
     });
   });
 
-  describe('Add chart value tests', async () => {
+  describe('Add chart value tests', () => {
     it('chart value should be the same as current chart value if log value is 0', async () => {
-      const datetime = moment.utc().add(1, 'hour');
+      const datetime = moment.utc().subtract(1, 'day').add(1, 'hour');
       const logValue = 0;
       const currentChartValue = 10;
       const user = await User.create(seed[0]);
@@ -109,15 +110,11 @@ describe('Unit test', () => {
       const chart = await services.addChartValue(requestObj);
       expect(chart.value).to.equal(currentChartValue);
 
-      await Promise.all([
-        User.destroy({ where: { id: user.id } }),
-        Log.destroy({ where: { id: log.id } }),
-        Chart.destroy({ where: { id: chart.id } }),
-      ]);
+      await User.destroy({ where: { id: user.id } });
     });
 
     it('chart value should be 0 if current chart value is less than 0.5 * log value ', async () => {
-      const datetime = moment.utc().add(1, 'hour');
+      const datetime = moment.utc().subtract(1, 'day').add(1, 'hour');
       const logValue = 40;
       const currentChartValue = 19;
       const user = await User.create(seed[0]);
@@ -139,7 +136,7 @@ describe('Unit test', () => {
     });
 
     it('chart value should be 100 if current chart value is more than 100 + 0.5 * log value ', async () => {
-      const datetime = moment.utc().add(1, 'hour');
+      const datetime = moment.utc().subtract(1, 'day').add(1, 'hour');
       const logValue = 40;
       const currentChartValue = 121;
       const user = await User.create(seed[0]);

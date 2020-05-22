@@ -19,4 +19,6 @@ router.post(
   middlewares.catchErrors(controller.addLog)
 );
 
+router.get('/logs/:userId', middlewares.catchErrors(controller.getLogsForUser));
+
 export default router;
